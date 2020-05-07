@@ -1,36 +1,41 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import LoginForm from "./components/LoginForm";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import Togglable from "./components/Togglable";
 import BlogForm from "./components/BlogForm";
 import BlogList from "./components/BlogList";
+import { useSelector, useDispatch } from "react-redux";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
-  const [user, setUser] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
-  const [visible, setVisible] = useState(false);
-  const [isBlogSortAsc, setIsBlogSortAsc] = useState(false);
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  const blogs = state.blogs;
+  const username = state.username;
+  const password = state.password;
+  const title = state.title;
+  const author = state.author;
+  const url = state.url;
+  const user = state.user;
+  const errorMessage = state.errorMessage;
+  const successMessage = state.successMessage;
+  const visible = state.visible;
+  const isBlogSortAsc = state.isBlogSortAsc;
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, []);
+    blogService.getAll().then((blogs) => {
+      dispatch({ type: "SET_BLOGS", payload: { blogs: blogs } });
+    });
+  }, [dispatch]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedInUser");
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
-      setUser(user);
+      dispatch({ type: "SET_USER", payload: { user: user } });
       blogService.setToken(user.token);
     }
-  }, []);
+  }, [dispatch]);
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -42,13 +47,17 @@ const App = () => {
 
       window.localStorage.setItem("loggedInUser", JSON.stringify(user));
       blogService.setToken(user.token);
-      setUser(user);
-      setUsername("");
-      setPassword("");
+      dispatch({ type: "SET_USER", payload: { user: user } });
     } catch (exception) {
-      setErrorMessage("wrong username or password");
+      dispatch({
+        type: "SET_ERROR_MESSAGE",
+        payload: { errorMessage: "wrong username or password" },
+      });
       setTimeout(() => {
-        setErrorMessage(null);
+        dispatch({
+          type: "SET_ERROR_MESSAGE",
+          payload: { errorMessage: null },
+        });
       }, 5000);
     }
   };
@@ -62,27 +71,37 @@ const App = () => {
         url,
       });
 
-      setTitle("");
-      setAuthor("");
-      setUrl("");
-      setBlogs(blogs.concat(newBlog));
-      setSuccessMessage(`a new blog ${title} by ${author} added`);
-      toggleVisibility();
+      dispatch({
+        type: "ADD_BLOG",
+        payload: { blog: newBlog },
+      });
+      dispatch({
+        type: "SET_SUCCESS_MESSAGE",
+        payload: { successMessage: `a new blog ${title} by ${author} added` },
+      });
+      dispatch({
+        type: "TOGGLE_VISIBILITY",
+        payload: { visible: !visible },
+      });
     } catch (exception) {
+      //
     } finally {
       setTimeout(() => {
-        setSuccessMessage(null);
+        dispatch({
+          type: "SET_SUCCESS_MESSAGE",
+          payload: { successMessage: null },
+        });
       }, 5000);
     }
   };
 
   const logout = () => {
     window.localStorage.clear();
-    setUser(null);
+    dispatch({ type: "SET_USER", payload: { user: null } });
   };
 
   const toggleVisibility = () => {
-    setVisible(!visible);
+    dispatch({ type: "SET_VISIBLE", payload: { visible: !visible } });
   };
 
   const onLike = (blog) => {
@@ -94,20 +113,26 @@ const App = () => {
         likes: blog.likes + 1,
       })
       .then((res) => {
-        const updatedBlog = blogs.map((b) => {
+        const updatedBlogs = blogs.map((b) => {
           if (b.id !== blog.id) {
             return b;
           }
 
           return res;
         });
-        setBlogs(updatedBlog);
+        dispatch({
+          type: "SET_BLOGS",
+          payload: { blogs: updatedBlogs },
+        });
       });
   };
 
   const onRemove = (blog) => {
     blogService.destroy(blog.id).then((res) => {
-      setBlogs(blogs.filter((b) => b.id !== blog.id));
+      dispatch({
+        type: "SET_BLOGS",
+        payload: { blogs: blogs.filter((b) => b.id !== blog.id) },
+      });
     });
   };
 
@@ -121,8 +146,14 @@ const App = () => {
           return a.likes - b.likes;
         };
     const sortedBlogs = blogs.slice().sort(sortFunc);
-    setBlogs(sortedBlogs);
-    setIsBlogSortAsc(!isBlogSortAsc);
+    dispatch({
+      type: "SET_BLOGS",
+      payload: { blogs: sortedBlogs },
+    });
+    dispatch({
+      type: "SET_IS_BLOG_SORT_ASC",
+      payload: { isBlogSortAsc: !isBlogSortAsc },
+    });
   };
 
   return (
@@ -133,8 +164,18 @@ const App = () => {
         <LoginForm
           username={username}
           password={password}
-          handleUsernameChange={({ target }) => setUsername(target.value)}
-          handlePasswordChange={({ target }) => setPassword(target.value)}
+          handleUsernameChange={({ target }) => {
+            dispatch({
+              type: "SET_USERNAME",
+              payload: { username: target.value },
+            });
+          }}
+          handlePasswordChange={({ target }) => {
+            dispatch({
+              type: "SET_PASSWORD",
+              payload: { password: target.value },
+            });
+          }}
           handleSubmit={handleLogin}
         />
       ) : (
@@ -154,9 +195,27 @@ const App = () => {
           >
             <BlogForm
               handleCreateBlog={handleCreateBlog}
-              handleTitleChange={({ target }) => setTitle(target.value)}
-              handleAuthorChange={({ target }) => setAuthor(target.value)}
-              handleUrlChange={({ target }) => setUrl(target.value)}
+              handleTitleChange={({ target }) => {
+                // setTitle(target.value);
+                dispatch({
+                  type: "SET_TITLE",
+                  payload: { title: target.value },
+                });
+              }}
+              handleAuthorChange={({ target }) => {
+                // setAuthor(target.value);
+                dispatch({
+                  type: "SET_AUTHOR",
+                  payload: { author: target.value },
+                });
+              }}
+              handleUrlChange={({ target }) => {
+                // setUrl(target.value);
+                dispatch({
+                  type: "SET_URL",
+                  payload: { url: target.value },
+                });
+              }}
               title={title}
               author={author}
               url={url}
