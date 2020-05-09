@@ -137,7 +137,6 @@ const App = () => {
   };
 
   const onSortByLikes = () => {
-    console.log(blogs);
     const sortFunc = isBlogSortAsc
       ? (a, b) => {
           return b.likes - a.likes;
@@ -196,21 +195,18 @@ const App = () => {
             <BlogForm
               handleCreateBlog={handleCreateBlog}
               handleTitleChange={({ target }) => {
-                // setTitle(target.value);
                 dispatch({
                   type: "SET_TITLE",
                   payload: { title: target.value },
                 });
               }}
               handleAuthorChange={({ target }) => {
-                // setAuthor(target.value);
                 dispatch({
                   type: "SET_AUTHOR",
                   payload: { author: target.value },
                 });
               }}
               handleUrlChange={({ target }) => {
-                // setUrl(target.value);
                 dispatch({
                   type: "SET_URL",
                   payload: { url: target.value },
