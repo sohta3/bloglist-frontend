@@ -17,6 +17,7 @@ const blogReducer = (
     successMessage: null,
     visible: false,
     isBlogSortAsc: false,
+    users: [],
   },
   action
 ) => {
@@ -85,6 +86,11 @@ const blogReducer = (
       return {
         ...state,
         url: action.payload.url,
+      };
+    case "SET_USERS":
+      return {
+        ...state,
+        users: action.payload.users,
       };
     default:
       return state;

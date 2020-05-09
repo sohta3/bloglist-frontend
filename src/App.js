@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import LoginForm from "./components/LoginForm";
 import blogService from "./services/blogs";
+import userService from "./services/users";
 import loginService from "./services/login";
 import Togglable from "./components/Togglable";
 import BlogForm from "./components/BlogForm";
 import BlogList from "./components/BlogList";
+import UserList from "./components/UserList";
 import { useSelector, useDispatch } from "react-redux";
 
 const App = () => {
@@ -21,10 +23,14 @@ const App = () => {
   const successMessage = state.successMessage;
   const visible = state.visible;
   const isBlogSortAsc = state.isBlogSortAsc;
+  const users = state.users;
 
   useEffect(() => {
     blogService.getAll().then((blogs) => {
       dispatch({ type: "SET_BLOGS", payload: { blogs: blogs } });
+    });
+    userService.getAll().then((users) => {
+      dispatch({ type: "SET_USERS", payload: { users: users } });
     });
   }, [dispatch]);
 
@@ -182,9 +188,11 @@ const App = () => {
           <h2>blogs</h2>
           <p>
             {user.name} logged in
-            <button id="logout-button" onClick={logout}>
-              logout
-            </button>
+            <td>
+              <button id="logout-button" onClick={logout}>
+                logout
+              </button>
+            </td>
           </p>
           <Togglable
             buttonLabelWhenHide={"create new blog"}
@@ -224,6 +232,8 @@ const App = () => {
             onRemove={onRemove}
             user={user}
           />
+          <h2>Users</h2>
+          <UserList users={users} />
         </div>
       )}
     </div>
