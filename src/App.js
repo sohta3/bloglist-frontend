@@ -7,7 +7,9 @@ import Togglable from "./components/Togglable";
 import BlogForm from "./components/BlogForm";
 import BlogList from "./components/BlogList";
 import UserList from "./components/UserList";
+import User from "./components/User";
 import { useSelector, useDispatch } from "react-redux";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -29,6 +31,9 @@ const App = () => {
     blogService.getAll().then((blogs) => {
       dispatch({ type: "SET_BLOGS", payload: { blogs: blogs } });
     });
+  }, [dispatch]);
+
+  useEffect(() => {
     userService.getAll().then((users) => {
       dispatch({ type: "SET_USERS", payload: { users: users } });
     });
@@ -98,12 +103,25 @@ const App = () => {
           payload: { successMessage: null },
         });
       }, 5000);
+      dispatch({
+        type: "SET_TITLE",
+        payload: { title: "" },
+      });
+      dispatch({
+        type: "SET_AUTHOR",
+        payload: { author: "" },
+      });
+      dispatch({
+        type: "SET_URL",
+        payload: { url: "" },
+      });
     }
   };
 
   const logout = () => {
     window.localStorage.clear();
     dispatch({ type: "SET_USER", payload: { user: null } });
+    dispatch({ type: "SET_VISIBLE", payload: { visible: false } });
   };
 
   const toggleVisibility = () => {
@@ -186,14 +204,14 @@ const App = () => {
       ) : (
         <div>
           <h2>blogs</h2>
-          <p>
+          <div>
             {user.name} logged in
-            <td>
+            <div>
               <button id="logout-button" onClick={logout}>
                 logout
               </button>
-            </td>
-          </p>
+            </div>
+          </div>
           <Togglable
             buttonLabelWhenHide={"create new blog"}
             buttonLabelWhenShow={"hide"}
@@ -232,8 +250,17 @@ const App = () => {
             onRemove={onRemove}
             user={user}
           />
-          <h2>Users</h2>
-          <UserList users={users} />
+          <Router>
+            <Switch>
+              <Route path="/users/:id">
+                <User users={users} />
+              </Route>
+              <Route path="/">
+                <h2>Users</h2>
+                <UserList users={users} blogs={blogs} />
+              </Route>
+            </Switch>
+          </Router>
         </div>
       )}
     </div>
