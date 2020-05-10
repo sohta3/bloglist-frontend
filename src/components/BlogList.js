@@ -1,20 +1,23 @@
 import React from "react";
-import Blog from "./Blog";
+import { Link } from "react-router-dom";
 
 const BlogList = ({ blogs, onLike, onSortByLikes, onRemove, user }) => {
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: "solid",
+    borderWidth: 1,
+    marginBottom: 5,
+  };
+
   return (
     <>
-      {blogs.length > 0 ? (
-        <button onClick={onSortByLikes}>sort by likes</button>
-      ) : null}
       {blogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          onLike={onLike}
-          onRemove={onRemove}
-          user={user}
-        />
+        <div key={blog.id} style={blogStyle}>
+          <Link to={`/blogs/${blog.id}`}>
+            {blog.title} {blog.author}
+          </Link>
+        </div>
       ))}
     </>
   );

@@ -8,6 +8,7 @@ import BlogForm from "./components/BlogForm";
 import BlogList from "./components/BlogList";
 import UserList from "./components/UserList";
 import User from "./components/User";
+import Blog from "./components/Blog";
 import { useSelector, useDispatch } from "react-redux";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -243,21 +244,31 @@ const App = () => {
               url={url}
             />
           </Togglable>
-          <BlogList
-            blogs={blogs}
-            onLike={onLike}
-            onSortByLikes={onSortByLikes}
-            onRemove={onRemove}
-            user={user}
-          />
           <Router>
             <Switch>
+              <Route path="/blogs/:id">
+                <Blog
+                  blogs={blogs}
+                  // key={blog.id}
+                  // blog={blog}
+                  // onLike={onLike}
+                  // onRemove={onRemove}
+                  // user={user}
+                />
+              </Route>
+              <Route path="/blogs"></Route>
               <Route path="/users/:id">
                 <User users={users} />
               </Route>
               <Route path="/">
-                <h2>Users</h2>
-                <UserList users={users} blogs={blogs} />
+                {/* <UserList users={users} blogs={blogs} /> */}
+                <BlogList
+                  blogs={blogs}
+                  // onLike={onLike}
+                  // onSortByLikes={onSortByLikes}
+                  // onRemove={onRemove}
+                  // user={user}
+                />
               </Route>
             </Switch>
           </Router>
