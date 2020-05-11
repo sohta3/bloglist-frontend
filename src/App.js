@@ -9,8 +9,9 @@ import BlogList from "./components/BlogList";
 import UserList from "./components/UserList";
 import User from "./components/User";
 import Blog from "./components/Blog";
+import Header from "./components/Header";
 import { useSelector, useDispatch } from "react-redux";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -204,15 +205,8 @@ const App = () => {
         />
       ) : (
         <div>
-          <h2>blogs</h2>
-          <div>
-            {user.name} logged in
-            <div>
-              <button id="logout-button" onClick={logout}>
-                logout
-              </button>
-            </div>
-          </div>
+          <Header user={user} logout={logout} />
+          <h1>blogs app</h1>
           <Togglable
             buttonLabelWhenHide={"create new blog"}
             buttonLabelWhenShow={"hide"}
@@ -261,7 +255,7 @@ const App = () => {
                 <User users={users} />
               </Route>
               <Route path="/">
-                {/* <UserList users={users} blogs={blogs} /> */}
+                <UserList users={users} blogs={blogs} />
                 <BlogList
                   blogs={blogs}
                   // onLike={onLike}
