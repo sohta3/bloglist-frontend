@@ -1,9 +1,9 @@
 import React from "react";
 import AppBar from "@material-ui/core/AppBar";
-import Button from "@material-ui/core/Button";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
 
 const Header = ({ user, logout }) => {
   const useStyles = makeStyles((theme) => ({
@@ -14,20 +14,21 @@ const Header = ({ user, logout }) => {
       marginRight: theme.spacing(2),
     },
     title: {
-      flexGrow: 1,
+      // flexGrow: 1,
+      paddingRight: "16px",
     },
   }));
 
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="static" color="secondary">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            {/* <Link to="/blogs">Blogs</Link> */}
+            <Link to="/blogs">Blogs</Link>
           </Typography>
           <Typography variant="h6" className={classes.title}>
-            {/* <Link to="/users">Users</Link> */}
+            <Link to="/users">Users</Link>
           </Typography>
           <Typography variant="h6" className={classes.title}>
             {user.name} logged in

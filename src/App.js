@@ -205,42 +205,10 @@ const App = () => {
         />
       ) : (
         <div>
-          <Header user={user} logout={logout} />
-          <h1>blogs app</h1>
-          <Togglable
-            buttonLabelWhenHide={"create new blog"}
-            buttonLabelWhenShow={"hide"}
-            visible={visible}
-            toggleVisibility={toggleVisibility}
-          >
-            <BlogForm
-              handleCreateBlog={handleCreateBlog}
-              handleTitleChange={({ target }) => {
-                dispatch({
-                  type: "SET_TITLE",
-                  payload: { title: target.value },
-                });
-              }}
-              handleAuthorChange={({ target }) => {
-                dispatch({
-                  type: "SET_AUTHOR",
-                  payload: { author: target.value },
-                });
-              }}
-              handleUrlChange={({ target }) => {
-                dispatch({
-                  type: "SET_URL",
-                  payload: { url: target.value },
-                });
-              }}
-              title={title}
-              author={author}
-              url={url}
-            />
-          </Togglable>
           <Router>
             <Switch>
               <Route path="/blogs/:id">
+                <Header user={user} logout={logout} />
                 <Blog
                   blogs={blogs}
                   // key={blog.id}
@@ -250,12 +218,48 @@ const App = () => {
                   // user={user}
                 />
               </Route>
-              <Route path="/blogs"></Route>
               <Route path="/users/:id">
+                <Header user={user} logout={logout} />
                 <User users={users} />
               </Route>
-              <Route path="/">
+              <Route path="/users">
+                <Header user={user} logout={logout} />
                 <UserList users={users} blogs={blogs} />
+              </Route>
+              <Route path="/">
+                <Header user={user} logout={logout} />
+                <h1>blogs app</h1>
+                <Togglable
+                  buttonLabelWhenHide={"create new blog"}
+                  buttonLabelWhenShow={"hide"}
+                  visible={visible}
+                  toggleVisibility={toggleVisibility}
+                >
+                  <BlogForm
+                    handleCreateBlog={handleCreateBlog}
+                    handleTitleChange={({ target }) => {
+                      dispatch({
+                        type: "SET_TITLE",
+                        payload: { title: target.value },
+                      });
+                    }}
+                    handleAuthorChange={({ target }) => {
+                      dispatch({
+                        type: "SET_AUTHOR",
+                        payload: { author: target.value },
+                      });
+                    }}
+                    handleUrlChange={({ target }) => {
+                      dispatch({
+                        type: "SET_URL",
+                        payload: { url: target.value },
+                      });
+                    }}
+                    title={title}
+                    author={author}
+                    url={url}
+                  />
+                </Togglable>
                 <BlogList
                   blogs={blogs}
                   // onLike={onLike}
