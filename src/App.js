@@ -28,6 +28,7 @@ const App = () => {
   const visible = state.visible;
   const isBlogSortAsc = state.isBlogSortAsc;
   const users = state.users;
+  const comment = state.comment;
 
   useEffect(() => {
     blogService.getAll().then((blogs) => {
@@ -130,6 +131,45 @@ const App = () => {
     dispatch({ type: "SET_VISIBLE", payload: { visible: !visible } });
   };
 
+  const handleCreateComment = async (blog) => {
+    let newBlog;
+
+    try {
+      newBlog = await blogService.createComment(blog.id, comment);
+
+      dispatch({
+        type: "SET_SUCCESS_MESSAGE",
+        payload: { successMessage: `${comment} by ${author} added` },
+      });
+    } catch (exception) {
+      //
+    } finally {
+      setTimeout(() => {
+        dispatch({
+          type: "SET_SUCCESS_MESSAGE",
+          payload: { successMessage: null },
+        });
+      }, 5000);
+
+      const updatedBlogs = blogs.map((b) => {
+        if (b.id !== blog.id) {
+          return b;
+        }
+        return newBlog;
+      });
+
+      dispatch({
+        type: "SET_BLOGS",
+        payload: { blogs: updatedBlogs },
+      });
+
+      dispatch({
+        type: "SET_COMMENT",
+        payload: { comment: "" },
+      });
+    }
+  };
+
   const onLike = (blog) => {
     blogService
       .update(blog.id, {
@@ -211,11 +251,16 @@ const App = () => {
                 <Header user={user} logout={logout} />
                 <Blog
                   blogs={blogs}
-                  // key={blog.id}
-                  // blog={blog}
-                  // onLike={onLike}
-                  // onRemove={onRemove}
-                  // user={user}
+                  onLike={onLike}
+                  onRemove={onRemove}
+                  handleCreateComment={handleCreateComment}
+                  handleBlogCommentChange={({ target }) => {
+                    dispatch({
+                      type: "SET_COMMENT",
+                      payload: { comment: target.value },
+                    });
+                  }}
+                  comment={comment}
                 />
               </Route>
               <Route path="/users/:id">
@@ -260,13 +305,7 @@ const App = () => {
                     url={url}
                   />
                 </Togglable>
-                <BlogList
-                  blogs={blogs}
-                  // onLike={onLike}
-                  // onSortByLikes={onSortByLikes}
-                  // onRemove={onRemove}
-                  // user={user}
-                />
+                <BlogList blogs={blogs} />
               </Route>
             </Switch>
           </Router>

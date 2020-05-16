@@ -34,4 +34,17 @@ const destroy = (id) => {
   return request.then((response) => response.data);
 };
 
-export default { getAll, create, update, setToken, destroy };
+const createComment = async (id, comment) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  const response = await axios.post(
+    `${baseUrl}/${id}/comments`,
+    { comment },
+    config
+  );
+  return response.data;
+};
+
+export default { getAll, create, update, setToken, destroy, createComment };

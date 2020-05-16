@@ -12,6 +12,7 @@ const blogReducer = (
     title: "",
     author: "",
     url: "",
+    comment: "",
     user: null,
     errorMessage: null,
     successMessage: null,
@@ -91,6 +92,11 @@ const blogReducer = (
       return {
         ...state,
         users: action.payload.users,
+      };
+    case "SET_COMMENT":
+      return {
+        ...state,
+        comment: action.payload.comment,
       };
     default:
       return state;

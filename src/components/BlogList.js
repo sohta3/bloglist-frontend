@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const BlogList = ({ blogs, onLike, onSortByLikes, onRemove, user }) => {
+const BlogList = ({ blogs }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,

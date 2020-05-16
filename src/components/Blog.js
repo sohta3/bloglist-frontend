@@ -1,24 +1,37 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
 import { useParams } from "react-router-dom";
 
-const Blog = ({ blogs, onLike, onRemove, user }) => {
+const Blog = ({
+  blogs,
+  onLike,
+  onRemove,
+  user,
+  handleCreateComment,
+  handleBlogCommentChange,
+  comment,
+}) => {
   const id = useParams().id;
   const blog = blogs.find((b) => b.id === id);
 
-  const blogCreatedUserId =
-    typeof blog.user[0] === "string" ? blog.user[0] : blog.user[0].id;
+  if (!blog) {
+    return null;
+  }
+  if (!blog.user) {
+    return null;
+  }
 
-  // const onClickView = () => {
-  //   setIsShowDetail(true);
-  // };
-
-  // const onClickHide = () => {
-  //   setIsShowDetail(false);
-  // };
+  let blogCreatedUserId;
+  if (blog.user) {
+    blogCreatedUserId =
+      typeof blog.user[0] === "string" ? blog.user[0] : blog.user[0].id;
+  }
 
   const onClickLike = () => {
     onLike(blog);
+  };
+
+  const onClickCreateComment = () => {
+    handleCreateComment(blog);
   };
 
   const onClickRemove = () => {
@@ -26,6 +39,10 @@ const Blog = ({ blogs, onLike, onRemove, user }) => {
       onRemove(blog);
     }
   };
+
+  const comments = blog.comments.map((c) => {
+    return <li id={c}>{c}</li>;
+  });
 
   return (
     <div>
@@ -49,6 +66,19 @@ const Blog = ({ blogs, onLike, onRemove, user }) => {
             remove
           </button>
         ) : null} */}
+        <h3>comments</h3>
+        {blog.comments.length > 0 ? <ul>{comments}</ul> : null}
+        <input
+          type="text"
+          onChange={handleBlogCommentChange}
+          value={comment}
+        ></input>
+        <button
+          id="create-new-blog-comment-button"
+          onClick={onClickCreateComment}
+        >
+          comment
+        </button>
       </div>
     </div>
   );
