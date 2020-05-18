@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "@material-ui/core/Button";
 
 const Togglable = ({
   visible,
@@ -13,13 +14,19 @@ const Togglable = ({
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button id="create-new-blog" onClick={toggleVisibility}>
+        <Button
+          id="create-new-blog"
+          variant="contained"
+          onClick={toggleVisibility}
+        >
           {buttonLabelWhenHide}
-        </button>
+        </Button>
       </div>
       <div style={showWhenVisible}>
         {children}
-        <button onClick={toggleVisibility}>{buttonLabelWhenShow}</button>
+        <Button variant="contained" onClick={toggleVisibility}>
+          {buttonLabelWhenShow}
+        </Button>
       </div>
     </div>
   );

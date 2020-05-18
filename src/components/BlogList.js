@@ -1,5 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+import Link from "@material-ui/core/Link";
 
 const BlogList = ({ blogs }) => {
   const blogStyle = {
@@ -14,7 +15,7 @@ const BlogList = ({ blogs }) => {
     <>
       {blogs.map((blog) => (
         <div key={blog.id} style={blogStyle}>
-          <Link to={`/blogs/${blog.id}`}>
+          <Link component={RouterLink} to={`/blogs/${blog.id}`}>
             {blog.title} {blog.author}
           </Link>
         </div>

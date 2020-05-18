@@ -1,35 +1,45 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+import Link from "@material-ui/core/Link";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 
 const UserList = ({ users, blogs }) => {
   console.log(blogs);
   return (
-    <>
-      <table>
-        <thead>
-          <tr>
-            <th> </th>
-            <th>blog created</th>
-          </tr>
-        </thead>
-        <tbody>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell> </TableCell>
+            <TableCell>blog created</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {users.map((user) => (
-            <tr key={user.id}>
-              <td>
-                <Link to={`/users/${user.id}`}>{user.name}</Link>
-              </td>
-              <td>
+            <TableRow key={user.id}>
+              <TableCell>
+                <Link component={RouterLink} to={`/users/${user.id}`}>
+                  {user.name}
+                </Link>
+              </TableCell>
+              <TableCell>
                 {
                   blogs.filter(
                     (b) => b.user[0].id === user.id || b.user[0] === user.id
                   ).length
                 }
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
-    </>
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 

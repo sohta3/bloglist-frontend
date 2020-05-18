@@ -1,4 +1,6 @@
 import React from "react";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
 
 const BlogForm = ({
   handleCreateBlog,
@@ -12,8 +14,8 @@ const BlogForm = ({
   return (
     <form onSubmit={handleCreateBlog}>
       <div>
-        title
-        <input
+        <TextField
+          label="title"
           id="title"
           type="text"
           value={title}
@@ -22,8 +24,8 @@ const BlogForm = ({
         />
       </div>
       <div>
-        author
-        <input
+        <TextField
+          label="author"
           id="author"
           type="text"
           value={author}
@@ -32,8 +34,8 @@ const BlogForm = ({
         />
       </div>
       <div>
-        url
-        <input
+        <TextField
+          label="url"
           type="text"
           id="url"
           value={url}
@@ -41,9 +43,14 @@ const BlogForm = ({
           onChange={handleUrlChange}
         />
       </div>
-      <button id="create-new-blog-button" type="submit">
+      <Button
+        variant="contained"
+        color="primary"
+        id="create-new-blog-button"
+        type="submit"
+      >
         create
-      </button>
+      </Button>
     </form>
   );
 };

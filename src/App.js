@@ -12,6 +12,7 @@ import Blog from "./components/Blog";
 import Header from "./components/Header";
 import { useSelector, useDispatch } from "react-redux";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Typography from "@material-ui/core/Typography";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -273,7 +274,9 @@ const App = () => {
               </Route>
               <Route path="/">
                 <Header user={user} logout={logout} />
-                <h1>blogs app</h1>
+                <Typography variant="h3" component="h1">
+                  blogs app
+                </Typography>
                 <Togglable
                   buttonLabelWhenHide={"create new blog"}
                   buttonLabelWhenShow={"hide"}

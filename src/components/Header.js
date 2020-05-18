@@ -3,7 +3,9 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+import Link from "@material-ui/core/Link";
+import Button from "@material-ui/core/Button";
 
 const Header = ({ user, logout }) => {
   const useStyles = makeStyles((theme) => ({
@@ -25,17 +27,21 @@ const Header = ({ user, logout }) => {
       <AppBar position="static" color="secondary">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            <Link to="/blogs">Blogs</Link>
+            <Link component={RouterLink} to="/blogs">
+              Blogs
+            </Link>
           </Typography>
           <Typography variant="h6" className={classes.title}>
-            <Link to="/users">Users</Link>
+            <Link component={RouterLink} to="/users">
+              Users
+            </Link>
           </Typography>
           <Typography variant="h6" className={classes.title}>
             {user.name} logged in
           </Typography>
-          <button color="inherit" id="logout-button" onClick={logout}>
+          <Button variant="contained" id="logout-button" onClick={logout}>
             Logout
-          </button>
+          </Button>
         </Toolbar>
       </AppBar>
     </div>

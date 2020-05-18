@@ -1,5 +1,8 @@
 import React from "react";
 import { useParams } from "react-router-dom";
+import Link from "@material-ui/core/Link";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
 
 const Blog = ({
   blogs,
@@ -52,13 +55,18 @@ const Blog = ({
         </h2>
         {/* <button onClick={onClickHide}>hide</button> */}
         <div className="url">
-          <a href={blog.url}>{blog.url}</a>
+          <Link href={blog.url}>{blog.url}</Link>
         </div>
         <div className="like">
           likes{blog.likes}{" "}
-          <button id="like-button" onClick={onClickLike}>
+          <Button
+            variant="contained"
+            color="secondary"
+            id="like-button"
+            onClick={onClickLike}
+          >
             like
-          </button>
+          </Button>
         </div>
         <div>added by {blog.author}</div>
         {/* {user.id === blogCreatedUserId ? (
@@ -68,17 +76,18 @@ const Blog = ({
         ) : null} */}
         <h3>comments</h3>
         {blog.comments.length > 0 ? <ul>{comments}</ul> : null}
-        <input
+        <TextField
           type="text"
           onChange={handleBlogCommentChange}
           value={comment}
-        ></input>
-        <button
+        ></TextField>
+        <Button
+          variant="contained"
           id="create-new-blog-comment-button"
           onClick={onClickCreateComment}
         >
           comment
-        </button>
+        </Button>
       </div>
     </div>
   );
